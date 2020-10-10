@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ROC Post Map</title>
+    <link rel="stylesheet" href="map.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab&display=swap" rel="stylesheet"> 
+</head>
+
+<body class="fullheight">
+<div class="box">
+  <div class="row header">
+    <h3>ROC Posts Map</h3>
+  </div>
+  <div class="row content">
+    <div id="map"></div>
+    <!-- Replace the value of the key parameter in the call to the Google Maps JavaScript API URL below with your own API key. -->
+    <!-- Make sure your API key is authorised to access the Google Maps API - you can enable that through your Google Developer console. -->
+  </div>
+  <div class="row footer">
+    <p>Copyright &copy; 2020</p>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="map.js"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY&callback=initialiseMap">
+    </script>
+</body>
+</html>
