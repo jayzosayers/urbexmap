@@ -1,6 +1,10 @@
 var map;
 var locations = [];
 
+var showRoc = true;
+var showCiv = false;
+var showMil = false;
+
 var iconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1642-nuclear-radioactive_4x.png&highlight=ff000000,';
 var iconTail = ',ff000000&scale=1.0';
 var icons = {
@@ -37,7 +41,12 @@ var icons = {
 };
 
 function initialiseMap() {
+  initRocMap();
+  //initCivMap();
+  //initMilMap();
+}
 
+function initRocMap() {
   // Load data from an example Google spreadsheet that contains latitude and longitude columns using Google Sheets API v4 that returns JSON.
   // Replace the ID of your Google spreadsheet and you API key in the URL:
   // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
@@ -60,14 +69,75 @@ function initialiseMap() {
 
     // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
     var mapOptions = {
-      zoom: 10,
-      center: new google.maps.LatLng(0, 0)
+      zoom: 6,
+      center: new google.maps.LatLng(55.7663893,-3.8858562)
     };
     var map = new google.maps.Map(document.getElementById('map'), mapOptions);
     setLocations(map, locations);
   });
 }
 
+function initCivMap() {
+// Load data from an example Google spreadsheet that contains latitude and longitude columns using Google Sheets API v4 that returns JSON.
+  // Replace the ID of your Google spreadsheet and you API key in the URL:
+  // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
+  // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
+  // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'ROC Posts'!A2:M?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
+    // Modify the code below to suit the structure of your spreadsheet.
+    $(data.values).each(function () {
+      var location = {};
+      location.title = this[2];
+      location.latitude = parseFloat(this[0]);
+      location.longitude = parseFloat(this[1]);
+      location.group = this[3];
+      location.condition = this[4];
+      location.visited = this[6];
+      location.visitdate = this[7];
+      locations.push(location);
+    });
+
+    // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+    var mapOptions = {
+      zoom: 6,
+      center: new google.maps.LatLng(55.7663893,-3.8858562)
+    };
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    setLocations(map, locations);
+  });
+}
+
+function initMilMap() {
+// Load data from an example Google spreadsheet that contains latitude and longitude columns using Google Sheets API v4 that returns JSON.
+  // Replace the ID of your Google spreadsheet and you API key in the URL:
+  // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
+  // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
+  // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'ROC Posts'!A2:M?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
+    // Modify the code below to suit the structure of your spreadsheet.
+    $(data.values).each(function () {
+      var location = {};
+      location.title = this[2];
+      location.latitude = parseFloat(this[0]);
+      location.longitude = parseFloat(this[1]);
+      location.group = this[3];
+      location.condition = this[4];
+      location.visited = this[6];
+      location.visitdate = this[7];
+      locations.push(location);
+    });
+
+    // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+    var mapOptions = {
+      zoom: 6,
+      center: new google.maps.LatLng(55.7663893,-3.8858562)
+    };
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    setLocations(map, locations);
+  });
+}
 
 function setLocations(map, locations) {
   var bounds = new google.maps.LatLngBounds();
@@ -125,4 +195,37 @@ function createMarker(map, location, infowindow) {
     }
   });;
   return marker;
+}
+
+function roc_toggle(checkbox){
+  //If it is checked.
+  if(checkbox.checked){
+    showRoc = true;
+  }
+  //If it has been unchecked.
+  else{
+    showRoc = false;
+  }
+}
+
+function civ_toggle(checkbox){
+  //If it is checked.
+  if(checkbox.checked){
+    showCiv = true;
+  }
+  //If it has been unchecked.
+  else{
+    showCiv = false;
+  }
+}
+
+function mil_toggle(checkbox){
+  //If it is checked.
+  if(checkbox.checked){
+    showMil = true;
+  }
+  //If it has been unchecked.
+  else{
+    showMil = false;
+  }
 }
