@@ -7,38 +7,104 @@ var showRoc = true;
 var showCiv = false;
 var showMil = false;
 
-var iconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1642-nuclear-radioactive_4x.png&highlight=ff000000,';
+var rociconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1642-nuclear-radioactive_4x.png&highlight=ff000000,';
+var civiconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1565-factory_4x.png&highlight=ff000000,';
+var miliconBase = "https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1657-police-officer_4x.png&highlight=ff000000,";
 var iconTail = ',ff000000&scale=1.0';
-var icons = {
+var rocIcons = {
   ConditionUnknown: {
-    icon: iconBase + '01579B' + iconTail
+    icon: rociconBase + '01579B' + iconTail
   },
   Flooded: {
-    icon: iconBase + '0288D1' + iconTail
+    icon: rociconBase + '0288D1' + iconTail
   },
   Accessible: {
-    icon: iconBase + '689F38' + iconTail
+    icon: rociconBase + '689F38' + iconTail
   },
   HeavilyDamaged: {
-    icon: iconBase + 'FDD835' + iconTail
+    icon: rociconBase + 'FDD835' + iconTail
   },
   Locked: {
-    icon: iconBase + 'FFA000' + iconTail
+    icon: rociconBase + 'FFA000' + iconTail
   },
   Inaccessible: {
-    icon: iconBase + 'BF360C' + iconTail
+    icon: rociconBase + 'BF360C' + iconTail
   },
   Demolished: {
-    icon: iconBase + 'C2185B' + iconTail
+    icon: rociconBase + 'C2185B' + iconTail
   },
   Destroyed: {
-    icon: iconBase + '7B1FA2' + iconTail
+    icon: rociconBase + '7B1FA2' + iconTail
   },
   Private: {
-    icon: iconBase + '6D4C41' + iconTail
+    icon: rociconBase + '6D4C41' + iconTail
   },
   none: {
-    icon: iconBase + 'BDBDBD' + iconTail
+    icon: rociconBase + 'BDBDBD' + iconTail
+  }
+};
+var civIcons = {
+  ConditionUnknown: {
+    icon: civiconBase + '01579B' + iconTail
+  },
+  Flooded: {
+    icon: civiconBase + '0288D1' + iconTail
+  },
+  Accessible: {
+    icon: civiconBase + '689F38' + iconTail
+  },
+  HeavilyDamaged: {
+    icon: civiconBase + 'FDD835' + iconTail
+  },
+  Locked: {
+    icon: civiconBase + 'FFA000' + iconTail
+  },
+  Inaccessible: {
+    icon: civiconBase + 'BF360C' + iconTail
+  },
+  Demolished: {
+    icon: civiconBase + 'C2185B' + iconTail
+  },
+  Destroyed: {
+    icon: civiconBase + '7B1FA2' + iconTail
+  },
+  Private: {
+    icon: civiconBase + '6D4C41' + iconTail
+  },
+  none: {
+    icon: civiconBase + 'BDBDBD' + iconTail
+  }
+};
+var milIcons = {
+  ConditionUnknown: {
+    icon: miliconBase + '01579B' + iconTail
+  },
+  Flooded: {
+    icon: miliconBase + '0288D1' + iconTail
+  },
+  Accessible: {
+    icon: miliconBase + '689F38' + iconTail
+  },
+  HeavilyDamaged: {
+    icon: miliconBase + 'FDD835' + iconTail
+  },
+  Locked: {
+    icon: miliconBase + 'FFA000' + iconTail
+  },
+  Inaccessible: {
+    icon: miliconBase + 'BF360C' + iconTail
+  },
+  Demolished: {
+    icon: miliconBase + 'C2185B' + iconTail
+  },
+  Destroyed: {
+    icon: miliconBase + '7B1FA2' + iconTail
+  },
+  Private: {
+    icon: miliconBase + '6D4C41' + iconTail
+  },
+  none: {
+    icon: miliconBase + 'BDBDBD' + iconTail
   }
 };
 
@@ -247,12 +313,31 @@ function createMarker(map, location, infowindow, maptype) {
   }
   console.log(iconType)
 
-  var marker = new google.maps.Marker({
-    position: position,
-    icon: icons[iconType].icon,
-    map: map,
-    title: location.title,
-  });
+  var marker;
+  
+  if (maptype == 'civ') {
+    marker = new google.maps.Marker({
+      position: position,
+      icon: civIcons[iconType].icon,
+      map: map,
+      title: location.title,
+    });
+  } else if (maptype == 'mil') {
+    marker = new google.maps.Marker({
+      position: position,
+      icon: milIcons[iconType].icon,
+      map: map,
+      title: location.title,
+    });
+  } else {
+    marker = new google.maps.Marker({
+      position: position,
+      icon: rocIcons[iconType].icon,
+      map: map,
+      title: location.title,
+    });
+  }
+
   if (maptype == "civ") {
     // Civ Sites
     google.maps.event.addListener(marker, 'click', function () {
@@ -313,3 +398,14 @@ function setFilterFlags(checkbox) {
 
   }
 }
+
+$(function () {
+  //#layers-menu a
+  $('a.dropdown-item').click(function (e) {
+    e.preventDefault();
+    $('a[href="' + $(this).attr('href') + '"]').tab('show');
+    $('#layers-menu a.dropdown-item').removeClass('active');
+    $(this).addClass('active');
+  })
+
+});

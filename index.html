@@ -25,10 +25,83 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">
-              <i data-feather="box" style="height:16px;"></i>&nbsp;Item
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i data-feather="map" style="height:16px;"></i>&nbsp;Maps
             </a>
+            <ul class="dropdown-menu" id="layers-menu">
+              <li><a role="button" class="dropdown-item active" href="#roc">ROC Posts</a></li>
+              <li><a role="button" class="dropdown-item" href="#civ">Civil Sites</a></li>
+              <li><a role="button" class="dropdown-item" href="#mil">Military Sites</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i data-feather="filter" style="height:16px;"></i>&nbsp;Filters
+            </a>
+            <div class="dropdown-menu" id="layers-menu">
+              <h6 class="dropdown-header">Site Condition</h6>
+              <div class="card-body" style="padding-top:0px;padding-bottom:0px; min-width:227px">
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Accessible" name="filter" checked>
+                    <label class="custom-control-label" for="Accessible">
+                      Accessible
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter"
+                      checked>
+                    <label class="custom-control-label" for="HeavilyDamaged">
+                      Heavily Damaged
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Locked" name="filter" checked>
+                    <label class="custom-control-label" for="Locked">
+                      Locked
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter"
+                      checked>
+                    <label class="custom-control-label" for="Inaccessible">
+                      Inaccessible
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Flooded" name="filter" checked>
+                    <label class="custom-control-label" for="Flooded">
+                      Flooded
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Demolished" name="filter" checked>
+                    <label class="custom-control-label" for="Demolished">
+                      Demolished
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Destroyed" name="filter" checked>
+                    <label class="custom-control-label" for="Destroyed">
+                      Destroyed
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Private" name="filter" checked>
+                    <label class="custom-control-label" for="Private">
+                      Private Owner
+                    </label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" value="" id="Unknown" name="filter" checked>
+                    <label class="custom-control-label" for="Unknown">
+                      Condition Unknown
+                    </label>
+                  </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -37,22 +110,22 @@
   <!-- Begin page content -->
   <main role="main" class="container-flex h-100">
     <div id="mapTab" class="container-flex mainbody h-100">
-      <ul class="nav nav-pills">
+      <ul class="nav nav-tabs" style="display:none">
         <li class="nav-item">
           <a href="#roc" class="nav-link active" data-toggle="tab">ROC Posts</a>
         </li>
         <li class="nav-item">
-          <a href="#civ" class="nav-link" data-toggle="tab">Abandoned Civil Sites</a>
+          <a href="#civ" class="nav-link" data-toggle="tab">Civil Sites</a>
         </li>
         <li class="nav-item">
-          <a href="#mil" class="nav-link" data-toggle="tab">Abandoned Military Sites</a>
+          <a href="#mil" class="nav-link" data-toggle="tab">Military Sites</a>
         </li>
       </ul>
-  
+
       <div class="tab-content h-100">
         <div class="tab-pane h-100 w-100 active" id="roc">
           <div class="row h-100">
-            <div class="col-12 col-md-9 mapbox">
+            <div class="col-12 col-md-9 mapbox h-100">
               <div id="rocmap" class="h-100 w-100"></div>
             </div>
             <div class="col-12 col-md-3">
@@ -67,7 +140,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter"
+                      checked>
                     <label class="custom-control-label" for="HeavilyDamaged">
                       Heavily Damaged
                     </label>
@@ -79,7 +153,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter"
+                      checked>
                     <label class="custom-control-label" for="Inaccessible">
                       Inaccessible
                     </label>
@@ -138,7 +213,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter"
+                      checked>
                     <label class="custom-control-label" for="HeavilyDamaged">
                       Heavily Damaged
                     </label>
@@ -150,7 +226,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter"
+                      checked>
                     <label class="custom-control-label" for="Inaccessible">
                       Inaccessible
                     </label>
@@ -209,7 +286,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="HeavilyDamaged" name="filter"
+                      checked>
                     <label class="custom-control-label" for="HeavilyDamaged">
                       Heavily Damaged
                     </label>
@@ -221,7 +299,8 @@
                     </label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter" checked>
+                    <input class="custom-control-input" type="checkbox" value="" id="Inaccessible" name="filter"
+                      checked>
                     <label class="custom-control-label" for="Inaccessible">
                       Inaccessible
                     </label>
