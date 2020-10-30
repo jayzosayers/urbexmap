@@ -59,109 +59,12 @@ h1, h2, h3, h4, h5 ,h6 {
   width:250px;
 }
 
+.baloontable {
+  margin-bottom: 0px;
+}
+
 .notesbox {
   max-height: 128px;
   overflow-y: scroll;
-}
-
-/*-- Condition Styles --*/
-.conditionunknown {
-  background-color: #01579B;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.flooded{
-  background-color: #0288D1;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.accessible{
-  background-color: #689F38;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.heavilydamaged{
-  background-color: #FDD835;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: black;
-  font-weight: 600;
-}
-
-.locked{
-  background-color: #FFA000;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: black;
-  font-weight: 600;
-}
-
-.inaccessible{
-  background-color: #BF360C;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.demolished{
-  background-color: #C2185B;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.destroyed{
-  background-color: #7B1FA2;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.private{
-  background-color: #6D4C41;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-}
-
-.unknown{
-  background-color: #BDBDBD;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: black;
-  font-weight: 600;
-}
-
-/*-- Visit Status Styles --*/
-.yes {
-  color: #689F38;
-  font-weight: 600;
-}
-
-.revisit {
-  color: #FFA000;
-  font-weight: 600;
-}
-
-.no {
-  color: #BF360C;
-  font-weight: 600;
-}
-
-.n\/a {
-  color: #C2185B;
-  font-weight: 600;
+  margin-bottom: 0px;
 }
