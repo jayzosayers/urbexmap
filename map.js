@@ -238,7 +238,7 @@ function setLocations(map, locations, maptype) {
     var new_marker = createMarker(map, locations[i], infowindow, maptype);
     bounds.extend(new_marker.position);
   }
-  map.fitBounds(bounds);
+  //map.fitBounds(bounds);
 }
 
 // get a subset of the filters that are set to true
@@ -337,45 +337,47 @@ function createMarker(map, location, infowindow, maptype) {
       title: location.title,
     });
   }
-
   if (maptype == "civ") {
     // Civ Sites
     google.maps.event.addListener(marker, 'click', function () {
-      infowindow.setContent('<div>' +
+      infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-        ((location.group === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Category: </span>' + location.group + '</p>')) +
-        ((location.condition === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Condition: </span>' + location.condition + '</p>')) +
-        ((location.visited === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Visited: </span>' + location.visited + ((location.visited === 'NO') ? "" : (' (' + location.visitdate + ')')) + '</p>')) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Risk: </span>' + location.risk)) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Priority: </span>' + location.priority)) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Notes: </span>' + location.notes)) +
+        ('<table class="table table-borderless table-sm"><tbody>') +
+        ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
+        ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
+        ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Risk</th><td>' + location.risk + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Priority</th><td>' + location.priority + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes</th><td><p  class="notesbox">' + location.notes + '</p></td></tr>')) +
         '</div>');
       infowindow.open(map, marker);
     });
   } else if (maptype == "mil") {
     // Mil Sites
     google.maps.event.addListener(marker, 'click', function () {
-      infowindow.setContent('<div>' +
+      infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-        ((location.group === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Category: </span>' + location.group + '</p>')) +
-        ((location.condition === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Condition: </span>' + location.condition + '</p>')) +
-        ((location.visited === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Visited: </span>' + location.visited + ((location.visited === 'NO') ? "" : (' (' + location.visitdate + ')')) + '</p>')) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Risk: </span>' + location.risk)) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Priority: </span>' + location.priority)) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Notes: </span>' + location.notes)) +
+        ('<table class="table table-borderless table-sm"><tbody>') +
+        ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
+        ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
+        ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Risk</th><td>' + location.risk + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Priority</th><td>' + location.priority + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes</th><td><p  class="notesbox">' + location.notes + '</p></td></tr>')) +
         '</div>');
       infowindow.open(map, marker);
     });
   } else {
     // ROC Posts
     google.maps.event.addListener(marker, 'click', function () {
-      infowindow.setContent('<div>' +
+      infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-        ((location.group === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Group: </span>' + location.group + '</p>')) +
-        ((location.condition === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Condition: </span>' + location.condition + '</p>')) +
-        ((location.visited === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Visited: </span>' + location.visited + ((location.visited === 'NO') ? "" : (' (' + location.visitdate + ')')) + '</p>')) +
-        ((location.notes === undefined) ? "" : ('<p class="balloon"><span class="dataheader">Notes: </span>' + location.notes)) +
-        '</div>');
+        ('<table class="table table-borderless table-sm"><tbody></tbody>') +
+        ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Group</th><td>' + location.group + '</td></tr>')) +
+        ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
+        ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes:</th><td><p class="notesbox">' + location.notes + '</p></td></tr>')) +
+        '</tbody></table>');
       infowindow.open(map, marker);
     });
   }
