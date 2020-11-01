@@ -141,16 +141,24 @@ function initRocMap() {
   // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
   // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
   // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
-  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'ROC Posts'!A2:M?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
-  // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'ROC Posts'!A2:O?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
     var mapOptions = {
       zoom: 6,
-      center: new google.maps.LatLng(55.7663893, -3.8858562)
+      center: new google.maps.LatLng(55.7663893, -3.8858562),
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      tilt: 0,
+      disableDefaultUI: true,
+      rotateControl: false,
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: true,
+      streetViewControl: true,
+      fullscreenControl: true
     };  
     
     rocmap = new google.maps.Map(document.getElementById('rocmap'), mapOptions);
 
-    
     // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.     
     // Modify the code below to suit the structure of your spreadsheet.
     $(data.values).each(function () {
@@ -174,6 +182,8 @@ function initRocMap() {
         visited: this[6],
         visitdate: this[7],
         notes: this[12],
+        extimgsrc: this[13],
+        intimgsrc: this[14],
         type: 'rocpost'
       });
       roclocations.push(location);
@@ -188,17 +198,24 @@ function initCivMap() {
   // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
   // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
   // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
-  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'Abandoned Civil Sites'!A2:J?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
-    // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
-    // Modify the code below to suit the structure of your spreadsheet.
-    var mapOptions = {
-      zoom: 6,
-      center: new google.maps.LatLng(55.7663893, -3.8858562)
-    };  
-    
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'Abandoned Civil Sites'!A2:L?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+      // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+      var mapOptions = {
+        zoom: 6,
+        center: new google.maps.LatLng(55.7663893, -3.8858562),
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        tilt: 0,
+        disableDefaultUI: true,
+        rotateControl: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        scaleControl: true,
+        streetViewControl: true,
+        fullscreenControl: true
+      };  
+
     civmap = new google.maps.Map(document.getElementById('civmap'), mapOptions);
 
-    
     // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.     
     // Modify the code below to suit the structure of your spreadsheet.
     $(data.values).each(function () {
@@ -224,6 +241,8 @@ function initCivMap() {
         visitdate: this[7],
         priority: this[8],
         notes: this[9],
+        extimgsrc: this[10],
+        intimgsrc: this[11],
         type: 'civsite'
       });
       civlocations.push(location);
@@ -238,17 +257,24 @@ function initMilMap() {
   // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
   // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
   // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
-  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'Abandoned Military Sites'!A2:J?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
-        // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
-    // Modify the code below to suit the structure of your spreadsheet.
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'Abandoned Military Sites'!A2:L?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
     var mapOptions = {
       zoom: 6,
-      center: new google.maps.LatLng(55.7663893, -3.8858562)
+      center: new google.maps.LatLng(55.7663893, -3.8858562),
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      tilt: 0,
+      disableDefaultUI: true,
+      rotateControl: false,
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: true,
+      streetViewControl: true,
+      fullscreenControl: true
     };  
     
     milmap = new google.maps.Map(document.getElementById('milmap'), mapOptions);
 
-    
     // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.     
     // Modify the code below to suit the structure of your spreadsheet.
     $(data.values).each(function () {
@@ -274,6 +300,8 @@ function initMilMap() {
         visitdate: this[7],
         priority: this[8],
         notes: this[9],
+        extimgsrc: this[10],
+        intimgsrc: this[11],
         type: 'milsite'
       });
       millocations.push(location);
@@ -288,6 +316,7 @@ function setLocations(map, locations, maptype) {
   var infowindow = new google.maps.InfoWindow({
     content: "Content String"
   });
+
   for (var i = 0; i < locations.length; i++) {
     var new_marker = createMarker(map, locations[i], infowindow, maptype);
     bounds.extend(new_marker.position);
@@ -390,26 +419,40 @@ $('input[name=filtercondition]').change(function (e) {
 
 function createMarker(map, location, infowindow, maptype) {
   var marker = location;
-  
+  var elemIdStr =  location.title.replace(/\s/g, '');
+
   if (maptype == "civ") {
     // Civ Sites
     google.maps.event.addListener(marker, 'click', function () {
-          infowindow.setContent('<div class="ballooncontent">' +
-            ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-            ('<table class="table table-borderless table-sm baloontable"><tbody>') +
-            ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
-            ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
-            ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
-            ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Risk</th><td>' + location.risk + '</td></tr>')) +
-            ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Priority</th><td>' + location.priority + '</td></tr>')) +
-            ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes</th><td><p  class="notesbox">' + location.notes + '</p></td></tr>')) +
-            '</div>');
-          infowindow.open(map, marker);
-        });
+      infowindow.setContent('<div class="ballooncontent">' +
+        ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
+        ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
+        '<div class="carousel-inner">' + 
+        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
+        '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
+        '<table class="table table-borderless table-sm baloontable"><tbody>' +
+        '<table class="table table-borderless table-sm baloontable"><tbody>' +
+        ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
+        ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
+        ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Risk</th><td>' + location.risk + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Priority</th><td>' + location.priority + '</td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes</th><td><p  class="notesbox">' + location.notes + '</p></td></tr>')) +
+        '</div>');
+      infowindow.open(map, marker);
+    });
   } else if (maptype == 'mil') {
     google.maps.event.addListener(marker, 'click', function () {
       infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
+        ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
+        '<div class="carousel-inner">' + 
+        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
+        '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
         ('<table class="table table-borderless table-sm baloontable"><tbody>') +
         ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
         ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
@@ -425,7 +468,14 @@ function createMarker(map, location, infowindow, maptype) {
     google.maps.event.addListener(marker, 'click', function () {
       infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-        ('<table class="table table-borderless table-sm baloontable"><tbody></tbody>') +
+        ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
+        '<div class="carousel-inner">' + 
+        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
+        '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
+        '<table class="table table-borderless table-sm baloontable"><tbody>' +
+        '<table class="table table-borderless table-sm baloontable"><tbody></tbody>' +
         ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Group</th><td>' + location.group + '</td></tr>')) +
         ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
         ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
@@ -434,15 +484,6 @@ function createMarker(map, location, infowindow, maptype) {
       infowindow.open(map, marker);
     });
   }
-  google.maps.event.addListener(map, 'zoom_changed', function () {
-    var maptype = map.getMapTypeId();
-    if (map.getZoom() >= map.mapTypes[maptype].maxZoom) {
-      if (map.getMapTypeId() != google.maps.MapTypeId.HYBRID) {
-        map.setMapTypeId(google.maps.MapTypeId.HYBRID)
-        map.setTilt(0); // disable 45 degree imagery
-      }
-    }
-  });;
   return marker;
 }
 

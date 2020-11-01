@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5 ,h6 {
 }
 
 .ballooncontent {
-  width:250px;
+  width: 275px;
 }
 
 .baloontable {
@@ -65,6 +65,6 @@ h1, h2, h3, h4, h5 ,h6 {
 
 .notesbox {
   max-height: 128px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-bottom: 0px;
 }
