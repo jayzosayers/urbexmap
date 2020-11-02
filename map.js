@@ -129,10 +129,27 @@ var conditionfilters = {
   ConditionUnknown: true
 };
 
+var rocGroups = [];
+
 function initialiseMap() {
+  initFilterData();
+
   initRocMap();
   initCivMap();
   initMilMap();
+}
+
+function initFilterData() {
+  var Group = '';
+
+  // Get JSON data for the ROC Groups from Spreadsheet
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'_Data'!B2:B?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    $(data.values).each(function () {
+      Group = this[0];
+      rocGroups.push(Group);
+    });
+    populateMenus(selectedTab);
+  });
 }
 
 function initRocMap() {
@@ -408,7 +425,7 @@ function filter_mil() {
   }
 }
 
-// Handles Filter Switch check event
+// Handles Filter Switch change event
 $('input[name=filtercondition]').change(function (e) {
   var cb_val = $(this).prop("checked");
   // Configure Filter Conditions
@@ -417,9 +434,53 @@ $('input[name=filtercondition]').change(function (e) {
   filter_markers(selectedTab);
 })
 
+function populateMenus(tab) {
+  var items = '';
+  var groupStr = '';
+  var itemStr = '';
+
+  // Determine the active tab and populate the relevant group/category filter menu.
+  if (tab == 1) {
+    // Populate CIV Category Menu
+
+  } else if (tab == 2) {
+    // Populate MIL Category Menu
+    
+  } else {
+    // Populate ROC Group Menu
+    for (var i = 0; i < rocGroups.length; i++) {
+      groupStr = rocGroups[i];
+      groupStr = 'group' + (groupStr.replace(/\s/g, ''));
+
+      itemStr = '<li><a class="dropdown-item" href="#" id="' + groupStr + '">' + rocGroups[i] + '</a></li>';
+      console.log(i + ': ' + itemStr);
+      items += itemStr;
+   }
+  }
+  $('#groupMenu').append(items);
+}
+
 function createMarker(map, location, infowindow, maptype) {
   var marker = location;
   var elemIdStr =  location.title.replace(/\s/g, '');
+  var intimgHide = false;
+  var extimgHide = false;
+  var allimgHide = false;
+
+  if (location.intimgsrc === undefined || location.intimgsrc === null || location.intimgsrc === ''){
+    intimgHide = true;
+  } else {
+    intimgHide = false;
+  }
+
+  if (location.extimgsrc === undefined || location.extimgsrc === null || location.extimgsrc === ''){
+    extimgHide = true;
+  } else {
+    extimgHide = false;
+  }
+
+  allimgHide = (intimgHide && extimgHide);
+  //console.log(location.title + ' : ' + intimgHide + ' : ' + extimgHide + ' : ' + allimgHide);
 
   if (maptype == "civ") {
     // Civ Sites
@@ -428,12 +489,11 @@ function createMarker(map, location, infowindow, maptype) {
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
         ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
         '<div class="carousel-inner">' + 
-        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
-        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        ((location.extimgsrc == undefined || location.extimgsrc == '') ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        ((location.intimgsrc == undefined || location.intimgsrc == '') ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
         '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
         '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
-        '<table class="table table-borderless table-sm baloontable"><tbody>' +
-        '<table class="table table-borderless table-sm baloontable"><tbody>' +
+        '<table class="table table-borderless table-sm balloontable"><tbody>' +
         ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
         ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
         ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
@@ -449,11 +509,11 @@ function createMarker(map, location, infowindow, maptype) {
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
         ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
         '<div class="carousel-inner">' + 
-        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
-        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        ((location.extimgsrc == undefined || location.extimgsrc == '') ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        ((location.intimgsrc == undefined || location.intimgsrc == '') ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
         '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
         '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
-        ('<table class="table table-borderless table-sm baloontable"><tbody>') +
+        ('<table class="table table-borderless table-sm balloontable"><tbody>') +
         ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Category</th><td>' + location.group + '</td></tr>')) +
         ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
         ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
@@ -468,14 +528,13 @@ function createMarker(map, location, infowindow, maptype) {
     google.maps.event.addListener(marker, 'click', function () {
       infowindow.setContent('<div class="ballooncontent">' +
         ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
-        ((location.extimgsrc == undefined && location.intimgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
+        (allimgHide ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
         '<div class="carousel-inner">' + 
-        ((location.extimgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
-        ((location.intimgsrc == undefined) ? "" : '<div class="carousel-item"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
-        '<a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
+        (extimgHide ? "" : '<div class="carousel-item' + (extimgHide ? '' : ' active') + '"><img class="d-block w-100" src="' + location.extimgsrc + '" alt="Exterior View"></div>') + 
+        (intimgHide ? "" : '<div class="carousel-item' + (extimgHide ? ' active' : '') + '"><img class="d-block w-100" src="' + location.intimgsrc + '" alt="Interior View"></div>') + 
+        '</div><a class="carousel-control-prev" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a>' + 
         '<a class="carousel-control-next" href="#markerCarousel' + elemIdStr + '" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>')) +
-        '<table class="table table-borderless table-sm baloontable"><tbody>' +
-        '<table class="table table-borderless table-sm baloontable"><tbody></tbody>' +
+        '<table class="table table-borderless table-sm balloontable"><tbody></tbody>' +
         ((location.group == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Group</th><td>' + location.group + '</td></tr>')) +
         ((location.condition == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Condition</th><td><span class="' + location.condition.replace(/\s/g, '').toLowerCase() + '">' + location.condition + '</span></td></tr>')) +
         ((location.visited == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Visited</th><td><span class="' + location.visited.toLowerCase() + '">' + location.visited + '</span>' + ((location.visited === 'NO' || location.visited === 'N/A') ? "" : (' (' + location.visitdate + ')')) + '</td></tr>')) +
@@ -488,21 +547,47 @@ function createMarker(map, location, infowindow, maptype) {
 }
 
 $(function () {
-  //#layers-menu a
   $('a.dropdown-item').click(function (e) {
     e.preventDefault();
-    $('a[href="' + $(this).attr('href') + '"]').tab('show');
-    $('#layers-menu a.dropdown-item').removeClass('active');
-    var thisTab = $(this).attr('href');
-    $(this).addClass('active');
 
-    if (thisTab == '#civ') {
-      selectedTab = 1;
-    } else if (thisTab == '#mil') {
-      selectedTab = 2;
-    } else {
-      selectedTab = 0;
+    // Get the data-command attribute of the trigger element
+    var datacommand = $(this).attr('data-command');
+
+    // Only continue if the trigger element is the map switcher layers-menu
+    if (datacommand == 'tabSwitch') {
+      $('a[href="' + $(this).attr('href') + '"]').tab('show');
+      $('#layers-menu a.dropdown-item').removeClass('active');
+      var thisTab = $(this).attr('href');
+      $(this).addClass('active');
+
+      if (thisTab == '#civ') {
+        // Set Selected Tab Flag to 1
+        selectedTab = 1;
+        // Set Group/Category labels to correct values
+        $('.groupType').text('Category');
+      } else if (thisTab == '#mil') {
+        selectedTab = 2;
+        $('.groupType').text('Category');
+      } else {
+        selectedTab = 0;
+        $('.groupType').text('Group...');
+      }
     }
   })
+});
 
+$('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+  if (!$(this).next().hasClass('show')) {
+    $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+  }
+  var $subMenu = $(this).next('.dropdown-menu');
+  $subMenu.toggleClass('show');
+
+
+  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+    $('.dropdown-submenu .show').removeClass('show');
+  });
+
+
+  return false;
 });

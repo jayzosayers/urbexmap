@@ -55,16 +55,52 @@ h1, h2, h3, h4, h5 ,h6 {
   margin-bottom: 5px;
 }
 
-.ballooncontent {
-  width: 275px;
-}
-
-.baloontable {
-  margin-bottom: 0px;
+.balloontable {
+  margin: 8px 0 0 0;
 }
 
 .notesbox {
   max-height: 128px;
   overflow-y: auto;
   margin-bottom: 0px;
+}
+
+.uses-submenu {
+  padding-right: 32px;
+}
+
+.nav-item.dropdown {
+  padding-right: 8px;
+}
+
+
+.dropdown-toggle::after, .submenu.dropdown-toggle::after {
+  display:none;
+}
+
+.sub-dropdown {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+}
+
+.main-dropdown {
+  position:absolute;
+  top: 9px;
+}
+
+.material-icons {
+  font-size: inherit;
+}
+
+@media (min-width: 481px) {
+  .ballooncontent {
+    width: 275px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .ballooncontent {
+    max-width: 250px;
+  }
 }
