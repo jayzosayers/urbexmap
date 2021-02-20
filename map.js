@@ -1,22 +1,27 @@
 var rocmap;
 var civmap;
 var milmap;
+var plnmap;
 
 var rocdata = [];
 var civdata = [];
 var mildata = [];
+var plndata = [];
 
 var roclocations = [];
 var civlocations = [];
 var millocations = [];
+var plnlocations = [];
 
 var showRoc = true;
 var showCiv = false;
 var showMil = false;
 
-var rociconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1642-nuclear-radioactive_4x.png&highlight=ff000000,';
-var civiconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1565-factory_4x.png&highlight=ff000000,';
-var miliconBase = "https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/1657-police-officer_4x.png&highlight=ff000000,";
+var iconBase = 'https://mt.google.com/vt/icon/name=icons/onion/SHARED-mymaps-container-bg_4x.png,icons/onion/SHARED-mymaps-container_4x.png,icons/onion/';
+var rociconBase = iconBase + '1642-nuclear-radioactive_4x.png&highlight=ff000000,';
+var civiconBase = iconBase + '1565-factory_4x.png&highlight=ff000000,';
+var miliconBase = iconBase + '1657-police-officer_4x.png&highlight=ff000000,';
+var plniconBase = iconBase + '1504-airport-plane_4x.png&highlight=01579b,';
 var iconTail = ',ff000000&scale=1.0';
 var rocIcons = {
   ConditionUnknown: {
@@ -114,6 +119,23 @@ var milIcons = {
     icon: miliconBase + 'BDBDBD' + iconTail
   }
 };
+var plnIcons = {
+  a: {
+    icon: plniconBase + 'BF360C' + iconTail
+  },
+  b: {
+    icon: plniconBase + 'FFA000' + iconTail
+  },
+  c: {
+    icon: plniconBase + 'FDD835' + iconTail
+  },
+  d: {
+    icon: plniconBase + '689F38' + iconTail
+  },
+  none: {
+    icon: plniconBase + 'BDBDBD' + iconTail
+  }
+};
 
 var selectedTab = 0;
 
@@ -137,6 +159,7 @@ function initialiseMap() {
   initRocMap();
   initCivMap();
   initMilMap();
+  initPlnMap();
 }
 
 function initFilterData() {
@@ -327,6 +350,119 @@ function initMilMap() {
   });
 }
 
+function initPlnMap() {
+  // Load data from an example Google spreadsheet that contains latitude and longitude columns using Google Sheets API v4 that returns JSON.
+  // Replace the ID of your Google spreadsheet and you API key in the URL:
+  // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
+  // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
+  // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1K-rWGh9SKkrkuGt1PSfU-G4HykE3zlvlIUGbB6zYIJc/values/'Plane Crash Sites'!A2:L?key=AIzaSyAwhjy9-JjXUOIKjez_1auka6ThFfQEksY", function (data) {
+    // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+    var mapOptions = {
+      zoom: 6,
+      center: new google.maps.LatLng(55.7663893, -3.8858562),
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      tilt: 0,
+      disableDefaultUI: true,
+      rotateControl: false,
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: true,
+      streetViewControl: true,
+      fullscreenControl: true
+    };  
+    
+    plnmap = new google.maps.Map(document.getElementById('plnmap'), mapOptions);
+
+    // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.     
+    // Modify the code below to suit the structure of your spreadsheet.
+    $(data.values).each(function () {
+      
+      var RemainsVisible = this[4];
+      var DamagesVisible = this[5];
+      var MemorialPlaque = this[6];
+      var paramflags = 0;
+      var flags = 0;
+      var infoURL = '';
+      var iconType = 'none';
+
+      for (let i = 4; i < 7; i++) {
+        // Get current array member, check if it is blank or contains an invalid value and if so default to NO.
+        var thisVal = this[i];
+        if ((thisVal == null && thisVal === thisVal && thisVal == '') || (thisVal != 'NO' && thisVal == 'YES')) {
+          thisVal = 'NO';
+        }
+        
+        // Set the relevant variable value, and add the corresponding value to the flag for the icon.
+        switch (i) {
+          case 4:
+            RemainsVisible = thisVal;
+            if (thisVal == 'YES') {
+              paramflags += 4;
+            }
+            break;
+          case 5:
+            DamagesVisible = thisVal;
+            if (thisVal == 'YES') {
+              paramflags += 2;
+            }
+            break;
+          case 6:
+            MemorialPlaque = thisVal;
+            if (thisVal == 'YES') {
+              paramflags += 1;
+            }
+            break;
+        }
+      }
+
+      // Set Icon
+      flags = Math.floor(paramflags / 2);
+      switch (flags) {
+        case 1:
+          // Has only a memorial
+          iconType = 'd';
+        break;
+        case 2:
+          // Has residual damage
+          iconType = 'c';
+        break;
+        case 3:
+          // Has wreckage
+          iconType = 'b';
+        break;
+        default:
+          // Has Nothing/Invalid values
+          iconType = 'a';
+      }
+
+      // prepare Info URL. If URL is valid, pass it to the object, otherwise pass an empty string.
+      if (isURL(this[8]) == 2) {
+        infoURL = this[8];  
+      } else {
+        infoURL = '';
+      }
+
+      var location = new google.maps.Marker({
+        position: new google.maps.LatLng(this[0], this[1]),
+        icon: plnIcons[iconType].icon,
+        map: plnmap,
+        title: this[2],
+        date: this[3],
+        remains: RemainsVisible,
+        damages: DamagesVisible,
+        memorial: MemorialPlaque,
+        notes: this[7],
+        info: infoURL,
+        imgsrc: this[9],
+        type: 'plnsite'
+      });
+      plnlocations.push(location);
+    });
+    setLocations(plnmap, plnlocations, 'pln');
+  });
+}
+
 function setLocations(map, locations, maptype) {
   var bounds = new google.maps.LatLngBounds();
   // Create nice, customised pop-up boxes, to appear when the marker is clicked on
@@ -357,6 +493,8 @@ var filter_markers = function (activeTab) {
     filter_civ();
   } else if (activeTab == 2) {
     filter_mil();
+  } else if (activeTab == 3) {
+    //filter_pln();
   } else {
     filter_roc();
   }
@@ -523,6 +661,24 @@ function createMarker(map, location, infowindow, maptype) {
         '</div>');
       infowindow.open(map, marker);
     });
+  } else if (maptype == 'pln') {
+    // Plane Crashes
+    google.maps.event.addListener(marker, 'click', function () {
+      infowindow.setContent('<div class="ballooncontent">' +
+        ('<h6><span class="dataheader">' + location.title + '</span></h6>') +
+        ((location.imgsrc == undefined) ? "" : ('<div id="markerCarousel' + elemIdStr + '" class="carousel slide" data-ride="carousel">' + 
+        '<div class="carousel-inner">' + 
+        ((location.imgsrc == undefined) ? "" : '<div class="carousel-item active"><img class="d-block w-100" src="' + location.imgsrc + '" alt="Image"></div></div>'))) +
+        ('<table class="table table-borderless table-sm balloontable"><tbody>') +
+        ((location.date == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Date</th><td>' + location.date + '</td></tr>')) +
+        ((location.remains == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Wreckage</th><td><span class="' + location.remains.replace(/\s/g, '').toLowerCase() + '">' + location.remains + '</span></td></tr>')) +
+        ((location.damages == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Residual Damage</th><td><span class="' + location.damages.replace(/\s/g, '').toLowerCase() + '">' + location.damages + '</span></td></tr>')) +
+        ((location.memorial == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Memorial</th><td><span class="' + location.memorial.replace(/\s/g, '').toLowerCase() + '">' + location.memorial + '</span></td></tr>')) +
+        ((location.infoURL == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Information</th><td><a class="btn btn-xs btn-primary" href="' + location.infoURL + '">View</a></td></tr>')) +
+        ((location.notes == undefined) ? "" : ('<tr class="balloon"><th scope="row" class="dataheader">Notes</th><td><p  class="notesbox">' + location.notes + '</p></td></tr>')) +
+        '</div>');
+      infowindow.open(map, marker);
+    });
   } else {
     // ROC Posts
     google.maps.event.addListener(marker, 'click', function () {
@@ -544,6 +700,11 @@ function createMarker(map, location, infowindow, maptype) {
     });
   }
   return marker;
+}
+
+function isURL(str) {
+  var regexp = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
+  return regexp.test(str);
 }
 
 $(function () {
